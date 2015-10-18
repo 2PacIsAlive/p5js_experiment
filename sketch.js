@@ -26,7 +26,7 @@ function mousePressed() {
   if ( song.isPlaying() ) { // .isPlaying() returns a boolean
     song.stop();
     deadOpacity = 50;
-    window.open ('https://soundcloud.com/its-chophaus')
+    window.open ('https://soundcloud.com/beatsbychophaus')
   } else {
     song.play();
     deadOpacity = 200
