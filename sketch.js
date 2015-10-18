@@ -1,11 +1,14 @@
 var max_distance;
 var img;
+var img2;
+var img3;
 var offset = 0;
 var easing = 0.05;
 var dx = 0;
 var dir = 0;
 var song;
 var deadOpacity = 50;
+var capture;
 
 function setup() {
   song = loadSound('assets/newB.mp3');
@@ -14,6 +17,9 @@ function setup() {
   max_distance = dist(0, 0, width, height);
   img = loadImage("assets/4.png");  // Load an image into the program
   img2 = loadImage("assets/3.png");
+  capture = createCapture(VIDEO);
+  capture.size(windowWidth, windowHeight);
+  capture.hide();
 }
 
 function mousePressed() {
@@ -23,7 +29,7 @@ function mousePressed() {
     window.open ('https://soundcloud.com/its-chophaus')
   } else {
     song.play();
-    deadOpacity = 150
+    deadOpacity = 200
   }
 }
 
@@ -47,9 +53,21 @@ function draw() {
   		dir = 0
   	}
   }
-  tint(255, deadOpacity);  // Display at half opacity
-  image(img2, offset, 0, windowWidth, windowHeight);
 
+   capture.loadPixels();
+    var stepSize = round(constrain(mouseX / 8, 6, 32));
+    for (var y=0; y<windowHeight; y+=stepSize) {
+      for (var x=0; x<windowWidth; x+=stepSize) {
+        var i = y * windowWidth + x;
+        var darkness = (255 - capture.pixels[i]) / 255;
+        var radius = stepSize * darkness;
+        fill(35);
+        rect(x, y, radius, radius);
+      }
+    }
+
+  tint(255, deadOpacity);  // Display at half opacity
+  image(img2, offset, offset, windowWidth, windowHeight);
   if (song.isPlaying){
   	// Set the volume to a range between 0 and 1.0
 	  var volume = map(mouseX, 0, width, 0, 1);
@@ -61,13 +79,5 @@ function draw() {
 	  var speed = map(mouseY, 0.1, height, 0, 1);
 	  speed = constrain(speed, 0.01, 2);
 	  song.rate(speed);
-
-	  // Draw some circles to show what is going on
-	  //stroke(0);
-	  //fill(51, 100);
-	  //ellipse(mouseX, 100, 48, 48);
-	  //stroke(0);
-	  //fill(51, 100);
-	  //ellipse(100, mouseY, 48, 48);
   } 
 }
