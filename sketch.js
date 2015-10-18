@@ -1,5 +1,5 @@
 var max_distance;
-var img;
+var img1;
 var img2;
 var img3;
 var offset = 0;
@@ -10,12 +10,17 @@ var song;
 var deadOpacity = 50;
 var capture;
 
+var reverb;
+
 function setup() {
   song = loadSound('assets/newB.mp3');
+  reverb = new p5.Reverb();
+  reverb.process(song, 6, 0.2);
+  reverb.amp(0);
   createCanvas(windowWidth, windowHeight);
   noStroke();
   max_distance = dist(0, 0, width, height);
-  img = loadImage("assets/4.png");  // Load an image into the program
+  img1 = loadImage("assets/4.png");  // Load an image into the program
   img2 = loadImage("assets/3.png");
   capture = createCapture(VIDEO);
   capture.size(windowWidth, windowHeight);
@@ -34,7 +39,7 @@ function mousePressed() {
 }
 
 function draw() {
-  image(img, 0, 0, windowWidth, windowHeight);  // Display at full opacity
+  image(img1, 0, 0, windowWidth, windowHeight);  // Display at full opacity
   if (dir == 0){
   	if (dx < 20){
   		dx = dx+1;
@@ -66,18 +71,19 @@ function draw() {
       }
     }
 
-  tint(255, deadOpacity);  // Display at half opacity
+  tint(255, deadOpacity); 
   image(img2, offset, offset, windowWidth, windowHeight);
   if (song.isPlaying){
   	// Set the volume to a range between 0 and 1.0
-	  var volume = map(mouseX, 0, width, 0, 1);
-	  volume = constrain(volume, 0, 1);
-	  song.amp(volume);
+	  var volume = map(mouseX, width, 0, 4, 0);
+	  volume = constrain(volume, 0, 4);
+	  reverb.amp(volume)
+    //song.amp(volume);
 
-	  // Set the rate to a range between 0.1 and 4
+	  // Set the rate to a range between 0.1 and 1
 	  // Changing the rate alters the pitch
-	  var speed = map(mouseY, 0.1, height, 0, 1);
-	  speed = constrain(speed, 0.01, 2);
+	  var speed = map(mouseY, 0.1, height, 0, 2);
+	  speed = constrain(speed, 0.01, 1);
 	  song.rate(speed);
   } 
 }
