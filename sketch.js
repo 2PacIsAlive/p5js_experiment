@@ -9,7 +9,6 @@ var dir = 0;
 var song;
 var deadOpacity = 50;
 var capture;
-
 var reverb;
 
 function setup() {
