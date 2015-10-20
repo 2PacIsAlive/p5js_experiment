@@ -60,13 +60,13 @@ function draw() {
   }
 
    capture.loadPixels();
-    var stepSize = round(constrain(mouseX / 8, 6, 32));
+    var stepSize = round(constrain(mouseX / 8, 6, 200));
     for (var y=0; y<windowHeight; y+=stepSize) {
       for (var x=0; x<windowWidth; x+=stepSize) {
         var i = y * windowWidth + x;
         var darkness = (255 - capture.pixels[i]) / 255;
         var radius = stepSize * darkness;
-        fill(35);
+        fill(stepSize);
         rect(x, y, radius, radius);
       }
     }
